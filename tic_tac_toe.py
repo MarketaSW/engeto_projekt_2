@@ -37,15 +37,30 @@ def print_game_board(board):
             cell = "   "
             print(cell, end= "|")
         print("\n" + grid)
-       
+
+def make_move(board, player, move):
+    """ Make a move on a game board.
+    Parameters:
+    - board: A list representing a game board.
+    - player: Player "o" or player "x".
+    - move: Place a stone in a slot number 1 - 9. """
+    row = ((move - 1) // 3)
+    cell = ((move - 1) % 3)
+    if board[row][cell] == "   ":
+        board[row][cell] = player 
+    else:
+        print("This slot is already occupied.")       
     
 
 greet_user()
 print_game_rules()
 print_start_game()
+
 board = [
     [" ", " ", " "],
     [" ", " ", " "],
     [" ", " ", " "]
 ]
+print_game_board(board)
+make_move(board, "o", 5)
 print_game_board(board)
