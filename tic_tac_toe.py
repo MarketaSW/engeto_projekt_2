@@ -42,7 +42,7 @@ def print_game_board(board):
         print("\n" + grid)
     return board    
 
-def get_move_number(player = "x"): #ověřit formát inputu
+def get_move_number(player = "x"):
     while game_on:
         if player == "o":
             player = "x"
@@ -60,19 +60,36 @@ Player {player} | Please enter your move number(1-9):""")
         else:
             print("That's not a number.")         
 
-def make_move(board, player, move):
+def make_move(board, player, move): #check if the board is full / s/o won
     """ Make a move on a game board.
     Parameters:
     - board: A list representing a game board.
     - player: Player "o" or player "x".
     - move: Place a stone "o"/"x" in a cell number 1 - 9. """
-    row = ((move - 1) // 3)
-    cell = ((move - 1) % 3)
-    if board[row][cell] == "   ":
-        board[row][cell] = player 
-    else:
-        print("This slot is already occupied.") 
-    return board          
+    while game_on:
+        row = ((move - 1) // 3)
+        cell = ((move - 1) % 3)
+        if board[row][cell] == "   ":
+            board[row][cell] = player 
+        elif " " not in board:
+            game_on = False
+            print("Game over!")
+        else:
+            print("This slot is already occupied.") 
+
+        for row in board: # winning rows
+            if row[0] == row[1] == row[2] != " ":
+                game_on = False
+                print(f"Player {player} has won!")
+        for cell in range(3): #winning columns
+            if board[0][cell] == board[1][cell] == board[2][cell] != " ":
+                game_on = False
+                print(f"Player {player} has won!") #winning diagonals
+        if board[0][0] == board[1][1] == board[2][2] != " ":
+            game_on = False
+            print(f"Player {player} has won!") 
+
+        return board          
     
 def main():
     game_on = True
@@ -86,6 +103,6 @@ def main():
     ]
     print_game_board(board)
     get_move_number()
-    make_move()
+    make_move(board, player, move)
 
 main()    
