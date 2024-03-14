@@ -28,30 +28,37 @@ def print_start_game():
     separator = "_" * 40
     print(message, separator, sep= "\n")  
 
-def print_game_board():
-    board = [
-        [" ", " ", " "],
-        [" ", " ", " "],
-        [" ", " ", " "]
-    ]
+def print_game_board(board):
+    """ Print a game board.
+    Parameters:
+    - board: A list representing a game board."""
+   
     grid = "+---+---+---+"
     print(grid)
     for row in board:
-        print("|", end= "")
+        print("|", end= " ")
         for cell in row:
-            cell = "   "
-            print(cell, end= "|")
+            print(cell, end= " | ")
         print("\n" + grid)
     return board    
 
-def get_move_number(player = "x"):
+def get_move_number(player = "x"): #ověřit formát inputu
     while game_on:
-        move = input(f"Player {player} | Please enter your move number:")
         if player == "o":
             player = "x"
         else:
-            player = "o"    
-    return move
+            player = "o" 
+
+        move_number = input(f"""
+Player {player} | Please enter your move number(1-9):""")
+        if move_number.isdigit():
+            move = int(move_number)
+            if move in range(1,10):
+                return move
+            else:
+                print("Please enter a number between 1 and 9.")    
+        else:
+            print("That's not a number.")         
 
 def make_move(board, player, move):
     """ Make a move on a game board.
@@ -72,8 +79,13 @@ def main():
     greet_user()
     print_game_rules()
     print_start_game()
-    print_game_board()
+    board = [
+        [" ", " ", " "],
+        [" ", " ", " "],
+        [" ", " ", " "]
+    ]
+    print_game_board(board)
     get_move_number()
-    make_move(board,x,3)
+    make_move()
 
 main()    
