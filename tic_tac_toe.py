@@ -4,7 +4,7 @@ author: Markéta Svěráková Wallo
 email: marketa.wallo@gmail.com
 discord: marketasverakova_37252
 """
-game_on = True
+
 def greet_user():
     greeting = "Welcome to Tic Tac Toe"
     separator = "=" * 40
@@ -23,12 +23,13 @@ marks in a:
     separator = "=" * 40
     print(game_rules, separator, sep= "\n")
 
-def print_start_game():
+def start_game():
+    """ Print a start message."""
     message = "Let's start the game"  
     separator = "_" * 40
     print(message, separator, sep= "\n")  
 
-def print_game_board(board):
+def print_game_board(board: list) -> list:
     """ Print a game board.
     Parameters:
     - board: A list representing a game board."""
@@ -39,16 +40,21 @@ def print_game_board(board):
         print("|", end= " ")
         for cell in row:
             print(cell, end= " | ")
-        print("\n" + grid)
-    return board    
+        print("\n" + grid) 
 
-def get_move_number(player = "x"):
-    while game_on:
-        if player == "o":
-            player = "x"
-        else:
-            player = "o" 
+def switch_player(player = "x") -> str:
+    """Switch between players each round.
+    Parameters:
+    - player: Active player."""
+    return "x" if player == "o" else "o"
 
+def get_move_number(player) -> int:
+    """Return a number of cell from active user input.
+    Check input validity.
+    Parameters:
+    - player: Active player."""
+    
+    while True:
         move_number = input(f"""
 Player {player} | Please enter your move number(1-9):""")
         if move_number.isdigit():
@@ -58,51 +64,63 @@ Player {player} | Please enter your move number(1-9):""")
             else:
                 print("Please enter a number between 1 and 9.")    
         else:
-            print("That's not a number.")         
+            print("That's not a number.")                 
 
-def make_move(board, player, move): #check if the board is full / s/o won
-    """ Make a move on a game board.
+def make_move(board: list, player: str, move: int) -> list:
+    """Make a move on a game board.
     Parameters:
     - board: A list representing a game board.
     - player: Player "o" or player "x".
     - move: Place a stone "o"/"x" in a cell number 1 - 9. """
-    while game_on:
-        row = ((move - 1) // 3)
-        cell = ((move - 1) % 3)
-        if board[row][cell] == "   ":
-            board[row][cell] = player 
-        elif " " not in board:
-            game_on = False
-            print("Game over!")
-        else:
-            print("This slot is already occupied.") 
-
-        for row in board: # winning rows
-            if row[0] == row[1] == row[2] != " ":
-                game_on = False
-                print(f"Player {player} has won!")
-        for cell in range(3): #winning columns
-            if board[0][cell] == board[1][cell] == board[2][cell] != " ":
-                game_on = False
-                print(f"Player {player} has won!") #winning diagonals
-        if board[0][0] == board[1][1] == board[2][2] != " ":
-            game_on = False
-            print(f"Player {player} has won!") 
-
-        return board          
+     
+    row = (move - 1) // 3
+    cell = (move - 1) % 3
     
+    if board[row][cell] == " ":
+        board[row][cell] = player 
+    else:
+        print("This slot is already occupied.")       
+    return board
+              
+def validate_board(board: list, player: str):             
+    """Check game status.
+    Parameters:
+    - board: A list representing a game board.
+    - player: Active player."""
+
+    for row in board: # winning rows
+        if row[0] == row[1] == row[2] != " ":
+            print(f"Player {player} has won!")
+            return board
+    for cell in range(3): #winning columns
+            if board[0][cell] == board[1][cell] == board[2][cell] != " ":
+                print(f"Player {player} has won!") 
+                return board
+    if board[0][0] == board[1][1] == board[2][2] != " ": #winning diagonals
+        print(f"Player {player} has won!")
+        return board
+    elif board[0][2] == board[1][1] == board[2][0] != " ":
+        print(f"Player {player} has won!") 
+        return board
+
 def main():
-    game_on = True
     greet_user()
     print_game_rules()
-    print_start_game()
+    start_game()
+    
     board = [
         [" ", " ", " "],
         [" ", " ", " "],
         [" ", " ", " "]
     ]
-    print_game_board(board)
-    get_move_number()
-    make_move(board, player, move)
+    player = "x" 
 
-main()    
+    while True:
+        print_game_board(board)  
+        player = switch_player(player)  
+        move = get_move_number(player) 
+        board = make_move(board, player, move)
+        validate_board(board, player)
+
+if __name__ == "__main__":
+    main()
