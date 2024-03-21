@@ -29,6 +29,23 @@ def start_game() -> None:
     separator = "_" * 40
     print(message, separator, sep= "\n")  
 
+def choose_player_1() -> str:
+    players = ["x", "o", "computer"]
+    print(",".join(players))
+    player_1 = input("Choose Player 1:")
+    return player_1
+
+def choose_player_2(player_1) -> str:    
+    players = ["x", "o", "computer"]
+    players.remove(player_1)
+    print(",".join(players))
+    while True:
+        player_2 = input("Choose Player 2:")
+        if player_2 in players:
+            return player_2
+        else:
+            print("Already occupied!")
+
 def print_game_board(board: list) -> None:
     """ Print a game board.
     Parameters:
@@ -52,19 +69,7 @@ def get_move_number(player) -> int: #co když jeden hráč bude počítač?
     """Return a number of cell from active user input.
     Check input validity.
     Parameters:
-    - player: Active player."""
-    
-#     while True:
-#         move_number = input(f"""
-# Player {player} | Please enter your move number(1-9):""")
-#         if move_number.isdigit():
-#             move = int(move_number)
-#             if move in range(1,10):
-#                 return move
-#             else:
-#                 print("Please enter a number between 1 and 9.")    
-#         else:
-#             print("That's not a number.")      
+    - player: Active player."""    
     
     # if player == "computer":
     #     (...)
@@ -77,22 +82,6 @@ Player {player} | Please enter your move number (1-9):""")
             else: print("Please enter a number between 1 and 9.")     
         except ValueError:
             print("That's not a number.")
-
-
-#             try:
-#     cislo = int(input("Zadej libovolne cislo:"))
-#     print(100 / cislo)
-# # ConnectionError
-# except ValueError:
-#     defaultni_cislo = 1
-#     print(100 / defaultni_cislo)
-#     print(f"Bohuzel jsi nezadal cislo :(")
-# except ZeroDivisionError:
-#     print(f"Nulou nemuzes delit :9")
-# else:
-#     print("Pokracujeme dal..")
-# finally:
-#     print("Ukoncuji zapis")           
 
 def make_move(board: list, player: str, move: int) -> list:
     """Make a move on a game board.
@@ -145,7 +134,8 @@ def main():
         [" ", " ", " "],
         [" ", " ", " "]
     ]
-    player = "x" 
+    player_1 = choose_player_1() 
+    player_2 = choose_player_2(player_1)
     print_game_board(board) 
 
     while True:
