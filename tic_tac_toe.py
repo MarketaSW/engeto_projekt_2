@@ -39,7 +39,7 @@ def choose_player() -> dict: #osetrit validitu vstupu
     players["o"] = player_o
     return players #jmeno hrace nebo c
 
-def print_game_board(board: list) -> None:
+def print_game_board(board: list[str]) -> None:
     """ Print a game board.
     Parameters:
     - board: A list representing a game board."""
@@ -73,14 +73,14 @@ def get_move_number(players, active_player) -> int:
             try:
                 move = int(input(f"""
 Player {active_player} | Please enter your move number (1-9):"""))
-                if move in range(1,10):
+                if move in range(1, 10):
                     return move
-                else: 
-                    raise ValueError ("Please enter a number between 1 and 9.")     
+                else:
+                    print("Please enter a number between 1 and 9.")
             except ValueError:
                 print("That's not a number.")
 
-def make_move(board: list, active_player: str, move: int, players: dict) -> list[str]:
+def make_move(board: list[str], active_player: str, move: int, players: dict) -> list[str]:
     """Make a move on a game board.
     Parameters:
     - board: A list representing a game board.
@@ -100,7 +100,7 @@ def make_move(board: list, active_player: str, move: int, players: dict) -> list
                 print("This cell is already occupied.")
             move = get_move_number(players, active_player)
           
-def validate_board(board: list, active_player: str) -> bool:             
+def validate_board(board: list, active_player: str, players: dict) -> bool:             
     """Check game status.
     Parameters:
     - board: A list representing a game board.
@@ -108,17 +108,17 @@ def validate_board(board: list, active_player: str) -> bool:
 
     for row in board: # winning rows
         if row[0] == row[1] == row[2] != " ":
-            print(f"Player {active_player}, has won!")
+            print(f"Player {players[active_player]}, has won!")
             return False
     for cell in range(3): #winning columns
             if board[0][cell] == board[1][cell] == board[2][cell] != " ":
-                print(f"Player {active_player} has won!") 
+                print(f"Player {players[active_player]} has won!") 
                 return False
     if board[0][0] == board[1][1] == board[2][2] != " ": #winning diagonals
-        print(f"Player {active_player} has won!")
+        print(f"Player {players[active_player]} has won!")
         return False
     elif board[0][2] == board[1][1] == board[2][0] != " ":
-        print(f"Player {active_player} has won!") 
+        print(f"Player {players[active_player]} has won!") 
         return False
    
 
