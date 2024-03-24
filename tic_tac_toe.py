@@ -64,21 +64,21 @@ def get_move_number(players, active_player) -> int:
     Parameters:
     - player: Active player."""    
     
-    if players[active_player] == "c":
-        move = random.randint(1, 9)
-        switch_player(active_player)
-        return move
+    while True:
+        if players[active_player] == "c":
+            move = random.randint(1, 9)
+            return move
 
-    else:
-        try:
-            move = int(input(f"""
+        else:
+            try:
+                move = int(input(f"""
 Player {active_player} | Please enter your move number (1-9):"""))
-            if move in range(1,10):
-                return move
-            else: 
-                raise ValueError ("Please enter a number between 1 and 9.")     
-        except ValueError:
-            print("That's not a number.")
+                if move in range(1,10):
+                    return move
+                else: 
+                    raise ValueError ("Please enter a number between 1 and 9.")     
+            except ValueError:
+                print("That's not a number.")
 
 def make_move(board: list, active_player: str, move: int, players: dict) -> list[str]:
     """Make a move on a game board.
@@ -96,7 +96,8 @@ def make_move(board: list, active_player: str, move: int, players: dict) -> list
             return board
         else:
             print_game_board(board)
-            print("This cell is already occupied.")
+            if players[active_player] != "c":
+                print("This cell is already occupied.")
             move = get_move_number(players, active_player)
           
 def validate_board(board: list, active_player: str) -> bool:             
