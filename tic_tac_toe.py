@@ -5,6 +5,8 @@ email: marketa.wallo@gmail.com
 discord: marketasverakova_37252
 """
 
+import random
+
 def greet_user() -> None:
     greeting = "Welcome to Tic Tac Toe"
     separator = "=" * 40
@@ -29,22 +31,13 @@ def start_game() -> None:
     separator = "_" * 40
     print(message, separator, sep= "\n")  
 
-def choose_player_1() -> str:
-    players = ["x", "o", "computer"]
-    print(",".join(players))
-    player_1 = input("Choose Player 1:")
-    return player_1
-
-def choose_player_2(player_1) -> str:    
-    players = ["x", "o", "computer"]
-    players.remove(player_1)
-    print(",".join(players))
-    while True:
-        player_2 = input("Choose Player 2:")
-        if player_2 in players:
-            return player_2
-        else:
-            print("Already occupied!")
+def choose_player() -> dict: #osetrit validitu vstupu
+    players = dict()
+    player_x = input('Name of player x, "c" for computer:')
+    players["x"] = player_x
+    player_o = input('Name of player o, "c" for computer:')
+    players["o"] = player_o
+    return players #jmeno hrace nebo c
 
 def print_game_board(board: list) -> None:
     """ Print a game board.
@@ -59,31 +52,35 @@ def print_game_board(board: list) -> None:
             print(cell, end= " | ")
         print("\n" + grid) 
 
-def switch_player(player = "x") -> str: 
+def switch_player(active_player = "x") -> str: 
     """Switch between players each round.
     Parameters:
     - player: Active player."""
-    return "x" if player == "o" else "o"
+    return "x" if active_player == "o" else "o"
 
-def get_move_number(player) -> int: #co když jeden hráč bude počítač?
+def get_move_number(players, active_player) -> int: 
     """Return a number of cell from active user input.
     Check input validity.
     Parameters:
     - player: Active player."""    
     
-    # if player == "computer":
-    #     (...)
-    # elif:
+    if players[active_player] == "c":
+        move = random.randint(1, 9)
+        switch_player(active_player)
+        return move
+
+    else:
         try:
             move = int(input(f"""
-Player {player} | Please enter your move number (1-9):""")
+Player {active_player} | Please enter your move number (1-9):"""))
             if move in range(1,10):
                 return move
-            else: print("Please enter a number between 1 and 9.")     
+            else: 
+                raise ValueError ("Please enter a number between 1 and 9.")     
         except ValueError:
             print("That's not a number.")
 
-def make_move(board: list, player: str, move: int) -> list:
+def make_move(board: list, active_player: str, move: int, players: dict) -> list[str]:
     """Make a move on a game board.
     Parameters:
     - board: A list representing a game board.
@@ -94,15 +91,15 @@ def make_move(board: list, player: str, move: int) -> list:
         row = (move - 1) // 3
         cell = (move - 1) % 3
         if board[row][cell] == " ":
-            board[row][cell] = player
+            board[row][cell] = active_player
             print_game_board(board)
             return board
         else:
             print_game_board(board)
             print("This cell is already occupied.")
-            move = get_move_number(player)
+            move = get_move_number(players, active_player)
           
-def validate_board(board: list, player: str) -> bool:             
+def validate_board(board: list, active_player: str) -> bool:             
     """Check game status.
     Parameters:
     - board: A list representing a game board.
@@ -110,17 +107,17 @@ def validate_board(board: list, player: str) -> bool:
 
     for row in board: # winning rows
         if row[0] == row[1] == row[2] != " ":
-            print(f"Player {player} has won!")
+            print(f"Player {active_player}, has won!")
             return False
     for cell in range(3): #winning columns
             if board[0][cell] == board[1][cell] == board[2][cell] != " ":
-                print(f"Player {player} has won!") 
+                print(f"Player {active_player} has won!") 
                 return False
     if board[0][0] == board[1][1] == board[2][2] != " ": #winning diagonals
-        print(f"Player {player} has won!")
+        print(f"Player {active_player} has won!")
         return False
     elif board[0][2] == board[1][1] == board[2][0] != " ":
-        print(f"Player {player} has won!") 
+        print(f"Player {active_player} has won!") 
         return False
    
 
@@ -128,21 +125,21 @@ def main():
     greet_user()
     print_game_rules()
     start_game()
+    players = choose_player()
 
     board = [
         [" ", " ", " "],
         [" ", " ", " "],
         [" ", " ", " "]
     ]
-    player_1 = choose_player_1() 
-    player_2 = choose_player_2(player_1)
+    active_player = "x"
     print_game_board(board) 
 
     while True:
-        player = switch_player(player)  
-        move = get_move_number(player) 
-        board = make_move(board, player, move)
-        if validate_board(board, player) == False:
+        active_player = switch_player(active_player)  
+        move = get_move_number(players, active_player) 
+        board = make_move(board, active_player, move, players)
+        if validate_board(board, active_player) == False:
             break
         
 if __name__ == "__main__":
