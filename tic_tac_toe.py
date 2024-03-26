@@ -33,9 +33,9 @@ def start_game() -> None:
 
 def choose_player() -> dict: #osetrit validitu vstupu
     players = dict()
-    player_x = input('Name of player x, "c" for computer:')
+    player_x = input('Name of player x, ("c" for computer:)')
     players["x"] = player_x
-    player_o = input('Name of player o, "c" for computer:')
+    player_o = input('Name of player o, ("c" for computer:)')
     players["o"] = player_o
     return players #jmeno hrace nebo c
 
@@ -55,14 +55,15 @@ def print_game_board(board: list[str]) -> None:
 def switch_player(active_player = "x") -> str: 
     """Switch between players each round.
     Parameters:
-    - player: Active player."""
+    - active_player: Active player."""
     return "x" if active_player == "o" else "o"
 
 def get_move_number(players, active_player) -> int: 
-    """Return a number of cell from active user input.
+    """Return a number of cell from computer or active user input.
     Check input validity.
     Parameters:
-    - player: Active player."""    
+    - players: A list of players in the game.
+    - active_player: Active player."""    
     
     while True:
         if players[active_player] == "c":
@@ -84,8 +85,9 @@ def make_move(board: list[str], active_player: str, move: int, players: dict) ->
     """Make a move on a game board.
     Parameters:
     - board: A list representing a game board.
-    - player: Player "o" or player "x".
-    - move: Place a stone "o"/"x" in a cell number 1 - 9. """
+    - active_player: Player "o" or player "x".
+    - move: Place a stone "o"/"x" in a cell number 1 - 9.
+    - players: A list of players in the game. """
      
     while True:
         row = (move - 1) // 3
@@ -100,11 +102,12 @@ def make_move(board: list[str], active_player: str, move: int, players: dict) ->
                 print("This cell is already occupied.")
             move = get_move_number(players, active_player)
           
-def validate_board(board: list, active_player: str, players: dict) -> bool:             
+def validate_board(board: list[str], active_player: str, players: dict) -> bool:             
     """Check game status.
     Parameters:
     - board: A list representing a game board.
-    - player: Active player."""
+    - active_player: Active player.
+    - players: A list of players in the game."""
 
     for row in board: # winning rows
         if row[0] == row[1] == row[2] != " ":
@@ -120,7 +123,6 @@ def validate_board(board: list, active_player: str, players: dict) -> bool:
     elif board[0][2] == board[1][1] == board[2][0] != " ":
         print(f"Player {players[active_player]} has won!") 
         return False
-   
 
 def main():
     greet_user()
@@ -140,8 +142,9 @@ def main():
         active_player = switch_player(active_player)  
         move = get_move_number(players, active_player) 
         board = make_move(board, active_player, move, players)
-        if validate_board(board, active_player) == False:
+        if validate_board(board, active_player, players) == False:
             break
+
         
 if __name__ == "__main__":
     main()
