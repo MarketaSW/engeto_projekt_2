@@ -31,12 +31,10 @@ def start_game() -> None:
     separator = "_" * 40
     print(message, separator, sep= "\n")  
 
-def choose_player() -> dict: #osetrit validitu vstupu
+def choose_player() -> dict:
     players = dict()
-    player_x = input('Name of player x, ("c" for computer:)')
-    players["x"] = player_x
-    player_o = input('Name of player o, ("c" for computer:)')
-    players["o"] = player_o
+    players["x"] = input('Name of player x, ("c" for computer:)')
+    players["o"] = input('Name of player o, ("c" for computer:)')
     return players #jmeno hrace nebo c
 
 def print_game_board(board: list[str]) -> None:
