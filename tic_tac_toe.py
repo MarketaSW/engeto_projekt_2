@@ -74,7 +74,7 @@ def get_move_number(players, active_player) -> int:
 Player {active_player} | Please enter your move number (1-9):"""))
                 if move in range(1, 10):
                     return move
-                else:
+                else: #je to možné také zapsat pomocí except?
                     print("Please enter a number between 1 and 9.")
             except ValueError:
                 print("That's not a number.")
@@ -121,6 +121,9 @@ def validate_board(board: list[str], active_player: str, players: dict) -> bool:
     elif board[0][2] == board[1][1] == board[2][0] != " ":
         print(f"Player {players[active_player]} has won!") 
         return False
+    if all(cell != " " for row in board for cell in row):
+            print("It's a draw. Game over!")
+            return False
 
 def main():
     greet_user()
