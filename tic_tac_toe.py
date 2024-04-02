@@ -95,7 +95,6 @@ def make_move(board: list[str], active_player: str, move: int, players: dict) ->
             print_game_board(board)
             return board
         else:
-            print_game_board(board)
             if players[active_player] != "c":
                 print("This cell is already occupied.")
             move = get_move_number(players, active_player)
@@ -121,7 +120,7 @@ def validate_board(board: list[str], active_player: str, players: dict) -> bool:
     elif board[0][2] == board[1][1] == board[2][0] != " ":
         print(f"Player {players[active_player]} has won!") 
         return False
-    if all(cell != " " for row in board for cell in row):
+    if all(cell != " " for row in board for cell in row): #game over
             print("It's a draw. Game over!")
             return False
 
