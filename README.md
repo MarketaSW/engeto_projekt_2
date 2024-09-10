@@ -5,7 +5,7 @@ Cílem této hry je umístit 3 hrací kameny (křížek X nebo kolečko O), a to
 
 ### Co umí?
 
-![welcome](/assets/welcome.png)
+
 - pozdravit uživatele
 - vypsat pravidla hry
 - zeptat se na jména hráčů
@@ -18,5 +18,7 @@ Cílem této hry je umístit 3 hrací kameny (křížek X nebo kolečko O), a to
   - jakmile hráč úspěšně vybere pole, zobrazí nový stav hrací plochy
     
 Program vyhodnocuje, jestli horizontálně/vertikálně/diagonálně není některý hrací kámen třikrát. Pokud ano, vyhrává hráč, kterému tyto tři kameny patří, pokud nezbývá žádné volné hrací pole a žádný hráč nevyhrál, jde o remízu.
+
+![welcome](/assets/welcome.png)
 
 ![end of game](/assets/win.png)
